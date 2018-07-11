@@ -26,11 +26,26 @@ export class UserController {
         mapper.put({item: newUser}).then(() => {
             // The post has been created!
             console.log(newUser.id);
-        });
+        })
+        .catch(err => {
+            console.log(err);
+        });        
     }
 
     public getUsers (req: Request, res: Response) {           
         console.log('TableController.getUsers'); 
+    }
+
+    public getUser (req: Request, res: Response) {           
+        console.log('TableController.getUser');   
+        mapper.get(Object.assign(new User(), {id: req.params.userId}))
+        .then(myItem => {
+            console.log(myItem);
+        })
+        .catch(err => {
+            // the item was not found
+            console.log(err);
+        })
     }
 
 }

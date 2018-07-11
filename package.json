@@ -13,7 +13,7 @@
     "format": "prettier --write --config .prettierrc.yaml '**/*.ts'",
     "clean": "rm -rf build/*",
     "test": "jest && tsc --noEmit",
-    "start": "ts-node src/local.ts",
+    "start": "yarn build && ts-node src/local.ts",
     "build": "yarn clean && tsc --outDir build",
     "prepare": "yarn format && yarn test",
     "package": "yarn build && serverless package",

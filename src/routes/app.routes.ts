@@ -30,6 +30,10 @@ export class Routes {
     // POST endpoint
     .post(this.userController.addNewUser);
 
+    app.route('/user/:userId')
+        // get specific contact
+        .get(this.userController.getUser)
+
     
   }
 }
