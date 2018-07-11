@@ -5,9 +5,7 @@ import { json, urlencoded } from 'body-parser';
 import { eventContext } from 'aws-serverless-express/middleware';
 import { Routes } from './routes/app.routes';
 
-
 class App {
-
   public app: express.Application;
   public route: Routes = new Routes();
 

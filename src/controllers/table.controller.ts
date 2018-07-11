@@ -1,16 +1,14 @@
-import {TableService} from './../services/table.service';
+//import {TableService} from './../services/table.service';
 
 export class TableController {
+  //public table: TableService = new TableService();
 
-    private table: TableService;
+  constructor() {
+    //this.table = new TableService();
+  }
 
-    constructor() {
-        this.table = new TableService();
-    }
-
-    public createTables(): void {
-        
-        this.table.initTables();
-    }
-
+  public createTables(): void {
+    console.log('TableController.createTables');
+    //this.table.initTables();
+  }
 }

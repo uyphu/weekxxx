@@ -1,52 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const user_controller_1 = require("../controllers/user.controller");
 class Routes {
+    constructor() {
+        this.userController = new user_controller_1.UserController();
+    }
     routes(app) {
         app.route('/').get((req, res) => {
             res.status(200).send({
                 message: 'GET request successfulll!!!!',
             });
         });
-        // Contact
-        app
-            .route('/contact')
-            // GET endpoint
-            .get((req, res) => {
-            // Get all contacts
-            res.status(200).send({
-                message: '/contactGET request successfulll!!!!',
-            });
-        })
+        // Contact 
+        app.route('/user')
+            .get((req, res, next) => {
+            // middleware
+            console.log(`Request from: ${req.originalUrl}`);
+            console.log(`Request type: ${req.method}`);
+            if (req.query.key !== '78942ef2c1c98bf10fca09c808d718fa3734703e') {
+                res.status(401).send('You shall not pass!');
+            }
+            else {
+                next();
+            }
+        }, this.userController.getUsers)
             // POST endpoint
-            .post((req, res) => {
-            // Create new contact
-            res.status(200).send({
-                message: 'POST request successfulll!!!!',
-            });
-        });
-        // Contact detail
-        app
-            .route('/contact/:contactId')
-            // get specific contact
-            .get((req, res) => {
-            // Get a single contact detail
-            res.status(200).send({
-                message: 'contact/:contactId GET request successfulll!!!!',
-            });
-        })
-            .put((req, res) => {
-            // Update a contact
-            res.status(200).send({
-                message: 'PUT request successfulll!!!!',
-            });
-        })
-            .delete((req, res) => {
-            // Delete a contact
-            res.status(200).send({
-                message: 'DELETE request successfulll!!!!',
-            });
-        });
+            .post(this.userController.addNewUser);
     }
 }
 exports.Routes = Routes;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwLnJvdXRlcy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9yb3V0ZXMvYXBwLnJvdXRlcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUdBO0lBRVMsTUFBTSxDQUFDLEdBQXdCO1FBQ3BDLEdBQUcsQ0FBQyxLQUFLLENBQUMsR0FBRyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsR0FBWSxFQUFFLEdBQWEsRUFBRSxFQUFFO1lBQ2pELEdBQUcsQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxDQUFDO2dCQUNuQixPQUFPLEVBQUUsOEJBQThCO2FBQ3hDLENBQUMsQ0FBQztRQUNMLENBQUMsQ0FBQyxDQUFDO1FBQ0gsVUFBVTtRQUNWLEdBQUc7YUFDQSxLQUFLLENBQUMsVUFBVSxDQUFDO1lBQ2xCLGVBQWU7YUFDZCxHQUFHLENBQUMsQ0FBQyxHQUFZLEVBQUUsR0FBYSxFQUFFLEVBQUU7WUFDbkMsbUJBQW1CO1lBQ25CLEdBQUcsQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxDQUFDO2dCQUNuQixPQUFPLEVBQUUsc0NBQXNDO2FBQ2hELENBQUMsQ0FBQztRQUNMLENBQUMsQ0FBQztZQUVGLGdCQUFnQjthQUNmLElBQUksQ0FBQyxDQUFDLEdBQVksRUFBRSxHQUFhLEVBQUUsRUFBRTtZQUNwQyxxQkFBcUI7WUFDckIsR0FBRyxDQUFDLE1BQU0sQ0FBQyxHQUFHLENBQUMsQ0FBQyxJQUFJLENBQUM7Z0JBQ25CLE9BQU8sRUFBRSwrQkFBK0I7YUFDekMsQ0FBQyxDQUFDO1FBQ0wsQ0FBQyxDQUFDLENBQUM7UUFDTCxpQkFBaUI7UUFDakIsR0FBRzthQUNBLEtBQUssQ0FBQyxxQkFBcUIsQ0FBQztZQUM3Qix1QkFBdUI7YUFDdEIsR0FBRyxDQUFDLENBQUMsR0FBWSxFQUFFLEdBQWEsRUFBRSxFQUFFO1lBQ25DLDhCQUE4QjtZQUM5QixHQUFHLENBQUMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLElBQUksQ0FBQztnQkFDbkIsT0FBTyxFQUFFLGlEQUFpRDthQUMzRCxDQUFDLENBQUM7UUFDTCxDQUFDLENBQUM7YUFDRCxHQUFHLENBQUMsQ0FBQyxHQUFZLEVBQUUsR0FBYSxFQUFFLEVBQUU7WUFDbkMsbUJBQW1CO1lBQ25CLEdBQUcsQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxDQUFDO2dCQUNuQixPQUFPLEVBQUUsOEJBQThCO2FBQ3hDLENBQUMsQ0FBQztRQUNMLENBQUMsQ0FBQzthQUNELE1BQU0sQ0FBQyxDQUFDLEdBQVksRUFBRSxHQUFhLEVBQUUsRUFBRTtZQUN0QyxtQkFBbUI7WUFDbkIsR0FBRyxDQUFDLE1BQU0sQ0FBQyxHQUFHLENBQUMsQ0FBQyxJQUFJLENBQUM7Z0JBQ25CLE9BQU8sRUFBRSxpQ0FBaUM7YUFDM0MsQ0FBQyxDQUFDO1FBQ0wsQ0FBQyxDQUFDLENBQUM7SUFDUCxDQUFDO0NBQ0Y7QUFqREQsd0JBaURDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwLnJvdXRlcy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9yb3V0ZXMvYXBwLnJvdXRlcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUdBLG9FQUFnRTtBQUVoRTtJQUFBO1FBQ1MsbUJBQWMsR0FBbUIsSUFBSSxnQ0FBYyxFQUFFLENBQUM7SUE0Qi9ELENBQUM7SUF6QlEsTUFBTSxDQUFDLEdBQXdCO1FBQ3BDLEdBQUcsQ0FBQyxLQUFLLENBQUMsR0FBRyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsR0FBWSxFQUFFLEdBQWEsRUFBRSxFQUFFO1lBQ2pELEdBQUcsQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxDQUFDO2dCQUNuQixPQUFPLEVBQUUsOEJBQThCO2FBQ3hDLENBQUMsQ0FBQztRQUNMLENBQUMsQ0FBQyxDQUFDO1FBRUgsV0FBVztRQUNYLEdBQUcsQ0FBQyxLQUFLLENBQUMsT0FBTyxDQUFDO2FBQ2pCLEdBQUcsQ0FBQyxDQUFDLEdBQVksRUFBRSxHQUFhLEVBQUUsSUFBa0IsRUFBRSxFQUFFO1lBQ3JELGFBQWE7WUFDYixPQUFPLENBQUMsR0FBRyxDQUFDLGlCQUFpQixHQUFHLENBQUMsV0FBVyxFQUFFLENBQUMsQ0FBQztZQUNoRCxPQUFPLENBQUMsR0FBRyxDQUFDLGlCQUFpQixHQUFHLENBQUMsTUFBTSxFQUFFLENBQUMsQ0FBQztZQUMzQyxJQUFHLEdBQUcsQ0FBQyxLQUFLLENBQUMsR0FBRyxLQUFLLDBDQUEwQyxFQUFDO2dCQUM1RCxHQUFHLENBQUMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLElBQUksQ0FBQyxxQkFBcUIsQ0FBQyxDQUFDO2FBQy9DO2lCQUFNO2dCQUNILElBQUksRUFBRSxDQUFDO2FBQ1Y7UUFDTCxDQUFDLEVBQUUsSUFBSSxDQUFDLGNBQWMsQ0FBQyxRQUFRLENBQUM7WUFFaEMsZ0JBQWdCO2FBQ2YsSUFBSSxDQUFDLElBQUksQ0FBQyxjQUFjLENBQUMsVUFBVSxDQUFDLENBQUM7SUFHeEMsQ0FBQztDQUNGO0FBN0JELHdCQTZCQyJ9
