@@ -32,8 +32,10 @@ export class Routes {
 
     app.route('/user/:userId')
         // get specific contact
-        .get(this.userController.getUser)
+        .get(this.userController.getUserById);
 
+    app.route('/test')        
+        .get(this.userController.test);
     
   }
 }
