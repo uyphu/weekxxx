@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { User } from '../models/user';
+//import { MyObj } from '../models/myobj';
 import { DataMapper } from '@aws/dynamodb-data-mapper';
 import DynamoDB = require('aws-sdk/clients/dynamodb');
 
@@ -15,48 +16,61 @@ export class UserController {
     public test (req: Request, res: Response) {   
         console.log('UserController.test');             
         let newUser = new User();
-        newUser = newUser.copyInto(req.body);    
+        newUser = newUser.copyInto(req.body);            
               
     }
 
     public addNewUser (req: Request, res: Response) {   
         console.log('UserController.addNewUser');             
-        let newUser = new User();
-        //newUser = newUser.copyInto(req.body);
-        newUser.email = "uyphu3@yahoo.com";
-        newUser.password = "uyphu3@yahoo.com";
+        let newUser:User = new User();
+        newUser = newUser.copyInto(JSON.stringify(req.body));            
     
-        mapper.put({item: newUser}).then(() => {
+        mapper.put({item: newUser}).then((response) => {
             // The post has been created!
-            console.log(newUser.id);
+            console.log(response);
+            res.json(response);
         })
         .catch(err => {
             console.log(err);
+            res.send(err);
         });        
     }
 
-    public getUsers (req: Request, res: Response) {           
-        console.log('TableController.getUsers'); 
-        mapper.get(Object.assign(new User(), {id: req.params.userId}))
+    public getUserById (req: Request, res: Response) {           
+        console.log('TableController.getUserById');      
+        //let obj = Object.assign(new User(), {id: req.params.userId}); 
+        let newUser:User = new User();
+        newUser.id = req.params.userId;
+        mapper.get(Object.assign(new User, {id: req.params.userId}))
+        //mapper.get(newUser)
         .then(myItem => {
-            console.log(myItem);
+            res.json(myItem);
         })
         .catch(err => {
             // the item was not found
             console.log(err);
+            res.send(err);
         })
     }
 
-    public getUserById (req: Request, res: Response) {           
-        console.log('TableController.getUser');   
-        mapper.get(Object.assign(new User(), {id: req.params.userId}))
-        .then(myItem => {
-            console.log(myItem);
+    public updateUser (req: Request, res: Response) {     
+        console.log('TableController.updateUser'); 
+
+        //mapper.update(Object.assign(new User(), {id: req.params.userId}));
+        let newUser:User = new User();
+        newUser = newUser.copyInto(JSON.stringify(req.body));                    
+    
+        mapper.update({item: newUser}).then((response) => {
+            // The post has been created!
+            console.log(response);
+            res.json(response);
         })
         .catch(err => {
-            // the item was not found
             console.log(err);
-        })
+            res.send(err);
+        });        
+
+        
     }
 
     // public getContacts (req: Request, res: Response) {           

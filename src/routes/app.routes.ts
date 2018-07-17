@@ -25,10 +25,11 @@ export class Routes {
         } else {
             next();
         }                        
-    }, this.userController.getUsers)        
+    }, this.userController.getUserById)        
 
     // POST endpoint
-    .post(this.userController.addNewUser);
+    .post(this.userController.addNewUser)
+    .put(this.userController.updateUser);
 
     app.route('/user/:userId')
         // get specific contact
