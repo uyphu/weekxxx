@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { User } from '../models/user';
-//import { MyObj } from '../models/myobj';
 import { DataMapper } from '@aws/dynamodb-data-mapper';
+
 import DynamoDB = require('aws-sdk/clients/dynamodb');
+import * as HttpStatus from 'http-status-codes'
 
 const client = new DynamoDB({region: 'eu-west-1'});
 const mapper = new DataMapper({client});
@@ -10,7 +11,7 @@ const mapper = new DataMapper({client});
 export class UserController {
 
     constructor() {
-
+        
     }
 
     public test (req: Request, res: Response) {   
@@ -23,12 +24,13 @@ export class UserController {
     public addNewUser (req: Request, res: Response) {   
         console.log('UserController.addNewUser');             
         let newUser:User = new User();
-        newUser = newUser.copyInto(JSON.stringify(req.body));            
+        newUser = newUser.copyInto(JSON.stringify(req.body)); 
+        newUser.createdAt = new Date();          
     
         mapper.put({item: newUser}).then((response) => {
             // The post has been created!
             console.log(response);
-            res.json(response);
+            res.status(HttpStatus.OK).json(response);
         })
         .catch(err => {
             console.log(err);
@@ -44,12 +46,13 @@ export class UserController {
         mapper.get(Object.assign(new User, {id: req.params.userId}))
         //mapper.get(newUser)
         .then(myItem => {
-            res.json(myItem);
+            res.status(HttpStatus.OK).json(myItem);
         })
         .catch(err => {
             // the item was not found
-            console.log(err);
-            res.send(err);
+            //console.log(err);            
+            res.status(HttpStatus.NOT_FOUND).send({error:HttpStatus.getStatusText(HttpStatus.NOT_FOUND), 
+            message: err.message});
         })
     }
 
