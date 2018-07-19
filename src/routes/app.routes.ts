@@ -25,7 +25,7 @@ export class Routes {
         } else {
           next();
         }
-      }, this.userController.getUserById)
+      }, this.userController.getUserByEmail)
 
       // POST endpoint
       .post(this.userController.addNewUser)
@@ -34,7 +34,7 @@ export class Routes {
     app
       .route('/user/:userId')
       // get specific contact
-      .get(this.userController.getUserById);
+      .get(this.userController.getUserByEmail);
 
     app.route('/test').get(this.userController.test);
   }

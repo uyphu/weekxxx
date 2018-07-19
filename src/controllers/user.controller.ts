@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { User } from '../models/user';
 import { DataMapper } from '@aws/dynamodb-data-mapper';
+import { QueryPaginator } from '@aws/dynamodb-query-iterator';
+//import {between} from '@aws/dynamodb-expressions';
 
 import DynamoDB = require('aws-sdk/clients/dynamodb');
 import * as HttpStatus from 'http-status-codes'
@@ -54,6 +56,24 @@ export class UserController {
             res.status(HttpStatus.NOT_FOUND).send({error:HttpStatus.getStatusText(HttpStatus.NOT_FOUND), 
             message: err.message});
         })
+    }
+
+    public async getUserByEmail (req: Request, res: Response) {           
+        console.log('TableController.getUserByEmail'); 
+        let input: DynamoDB.QueryInput = {
+            TableName: 'wx_user',
+            IndexName: 'email-index',
+            KeyConditionExpression: 'email = :val',
+            ExpressionAttributeValues: {':val': {S: req.query.email}},            
+            ReturnConsumedCapacity: 'NONE'
+        }
+        let paginator = new QueryPaginator(client, input, 1);             
+        
+        for await (const page of paginator) {
+            console.log(page);
+            res.status(HttpStatus.OK).json(page);
+            break;
+        }        
     }
 
     public updateUser (req: Request, res: Response) {     
